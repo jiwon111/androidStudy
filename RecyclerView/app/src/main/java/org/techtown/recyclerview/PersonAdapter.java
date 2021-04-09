@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder>{
+public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder> implements OnPersonItemClickListener{
     ArrayList<Person> items = new ArrayList<Person>();
+    OnPersonItemClickListener listener;
 
     @NonNull
     @Override
@@ -19,13 +20,24 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
         View itemView = inflater.inflate(R.layout.person_item, viewGroup, false);
 
-        return new ViewHolder(itemView);
+        return new ViewHolder(itemView, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Person item = items.get(position);
         viewHolder.setItem(item);
+    }
+
+    public void setOnItemClickListener(OnPersonItemClickListener listener){
+        this.listener = listener;
+    }
+
+    @Override
+    public void onItemClick(ViewHolder holder, View view, int position){
+        if (listener != null){
+            listener.onItemClick(holder, view, position);
+        }
     }
 
     @Override
@@ -37,11 +49,20 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         TextView textView;
         TextView textView2;
 
-        public ViewHolder(View itemView){
+        public ViewHolder(View itemView, final OnPersonItemClickListener listener){
             super(itemView);
 
             textView = itemView.findViewById(R.id.textView);
             textView2 = itemView.findViewById(R.id.textView2);
+            //아이템 뷰에 OnClickListener 설정
+            itemView.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View view){
+                    int position = getAdapterPosition();
+                    if(listener!=null){
+                        listener.onItemClick(ViewHolder.this, view, position);
+                    }
+                }
+            });
         }
 
         public void setItem(Person item){
