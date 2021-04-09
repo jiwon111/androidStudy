@@ -46,7 +46,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
         public void setItem(Person item){
             textView.setText(item.getName());
-            textView.setText(item.getMobile());
+            textView2.setText(item.getMobile());
         }
     }
 
