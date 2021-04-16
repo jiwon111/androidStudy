@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,10 +13,14 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.pedro.library.AutoPermissions;
+import com.pedro.library.AutoPermissionsListener;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AutoPermissionsListener {
     ImageView imageView;
     File file;
 
@@ -31,7 +37,25 @@ public class MainActivity extends AppCompatActivity {
                 takePicture();
             }
         });
+
+        AutoPermissions.Companion.loadAllPermissions(this, 101);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==101&&resultCode==RESULT_OK){
+            //이미지 파일을 Bitmap 객체로 만들기
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 8;
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+
+            //이미지뷰에 Bitmap 설정하기
+            imageView.setImageBitmap(bitmap);
+        }
+    }
+
 
     public void takePicture(){
         if (file==null){
@@ -51,9 +75,27 @@ public class MainActivity extends AppCompatActivity {
 
     private File createFile(){
         String filename = "capture.jpg";
-        File.storageDir = Environment.getExternalStorageDirectory();
+        File storageDir = Environment.getExternalStorageDirectory();
         File outFile = new File(storageDir, filename);
 
         return outFile;
+    }
+
+    public void onRequestPermissionResult(int requestCode, String permissions[],
+                                          int[] grantResults){
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AutoPermissions.Companion.parsePermissions(this, requestCode, permissions, this);
+    }
+
+    @Override
+    public void onDenied(int requestCode, String[] permissions){
+        Toast.makeText(this, "permissions denied : "+permissions.length,
+                Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onGranted(int requestCode, String[] permissions){
+        Toast.makeText(this, "permissions granted : "+permissions.length, Toast.LENGTH_LONG).show();
     }
 }
