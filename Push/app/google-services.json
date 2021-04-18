@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "917239542578",
+    "project_id": "push-badea",
+    "storage_bucket": "push-badea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917239542578:android:e3ba6795d3d99223e7dd2b",
+        "android_client_info": {
+          "package_name": "org.techtown.push"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917239542578-11c013sglf3dmus7qsfg19b931c0fqce.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5i29TV6djtRhc6JTdRmNRKrlc-tNRhuU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917239542578-11c013sglf3dmus7qsfg19b931c0fqce.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
